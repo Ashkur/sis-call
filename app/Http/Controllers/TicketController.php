@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 
 use App\Ticket;
+use App\Events\TicketOpen;
 use App\Http\Resources\TicketResource;
 
 class TicketController extends Controller
@@ -20,6 +21,12 @@ class TicketController extends Controller
         $ticket->status = 'PENDENTE';
 
         $user->tickets()->save($ticket);
+
+        $this->sendTicket($user->name);
+    }
+
+    public function sendTicket($username) {
+        event(new TicketOpen($username));
     }
 
     // public function update(Request $request, Ticket $ticket) {
