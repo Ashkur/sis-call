@@ -1,31 +1,30 @@
 <template>
     <div class="container">
-        <div class="row justify-content-center">
-            <div class="col-md-8">
-                <div class="card card-default">
-                    <div class="card-header">Example Component</div>
-
-                    <div class="card-body">
-                        I'm an example component.
-                        <u>teste</u>
-
-                        <ul v-for="ticket in tickets" :key="ticket.id">
-                            <li>{{ticket.description}}</li>
-                        </ul>
-
-                        <pre>
-                            {{ $data }}
-                        </pre>
-
-                    </div>
-                </div>
-            </div>
-        </div>
+        <h3>Chamados</h3>
+        <table class="table" >
+            <tr>
+                <td>ID</td>
+                <td>DESCRIÇÃO</td>
+                <td>STATUS</td>
+                <td>ABERTO EM</td>
+                <td>SERVIDOR</td>
+                <td>SETOR</td>
+            </tr>
+            <tr v-for="ticket in tickets.slice().reverse()" :key="ticket.id">
+                <td>{{ticket.id}}</td>
+                <td>{{ticket.description}}</td>
+                <td>{{ticket.status}}</td>
+                <td>{{ticket.created_at.date}}</td>
+                <td>{{ticket.user.name}}</td>
+                <td>T.I</td>
+            </tr>
+        </table>
     </div>
 </template>
 
 <script>
     export default {
+
         data() {
             return {
                 tickets: [],
@@ -51,7 +50,9 @@
 
         mounted() {
             this.listenChannel()
+            this.fetchTickets()
             console.log('Component mounted.')
         }
+
     }
 </script>

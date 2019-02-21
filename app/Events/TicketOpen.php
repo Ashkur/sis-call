@@ -33,6 +33,12 @@ class TicketOpen implements ShouldBroadcast
      *
      * @return \Illuminate\Broadcasting\Channel|array
      */
+
+    public function broadcastAs()
+    {
+        return 'newTickets';
+    }
+
     public function broadcastOn()
     {
         return ['ticket-open'];
