@@ -1,5 +1,6 @@
 <template>
     <div>
+        das
         <table class="table" >
             <tr v-for="ticket in tickets.slice().reverse()" :key="ticket.id">
                 <td>{{ticket.id}}</td>
@@ -26,17 +27,27 @@
                 console.log(this.tickets)
             },
 
+            soundNotification() {
+                var audio = new Audio(require('./news-ting.mp3'))
+                audio.play()
+            },
+
             listenChannel() {
                 window.Echo.channel('ticket-open')
                     .listen('.newTickets', () => {
                         this.fetchTickets()
+                        this.soundNotification()
                     })
             }
         },
 
         mounted() {
+            //this.soundNotification()
             this.listenChannel()
             console.log('Component mounted.')
+
+            var audio = new Audio(require('news-ting.mp3'))
+            audio.play()
         }
 
     }

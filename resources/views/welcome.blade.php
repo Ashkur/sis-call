@@ -69,5 +69,9 @@
             <tickets></tickets>
         </div>
         <script async src="{{ mix('js/app.js') }}"></script>
+        <script>
+                //let audio = new Audio('sound/news-ting.mp3')
+                //audio.play()
+        </script>
     </body>
 </html>

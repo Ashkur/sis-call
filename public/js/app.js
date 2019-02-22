@@ -1952,18 +1952,24 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 
       return fetchTickets;
     }(),
+    soundNotification: function soundNotification() {
+      var audioPath = 'sound/news-ting.mp3';
+      var audio = new Audio(audioPath);
+      audio.play();
+    },
     listenChannel: function listenChannel() {
       var _this = this;
 
       window.Echo.channel('ticket-open').listen('.newTickets', function () {
         _this.fetchTickets();
+
+        _this.soundNotification();
       });
     }
   },
   mounted: function mounted() {
     this.listenChannel();
     this.fetchTickets();
-    console.log('Component mounted.');
   }
 });
 
@@ -60197,9 +60203,12 @@ if (token) {
 window.Pusher = __webpack_require__(/*! pusher-js */ "./node_modules/pusher-js/dist/web/pusher.js");
 window.Echo = new laravel_echo__WEBPACK_IMPORTED_MODULE_0__["default"]({
   broadcaster: 'pusher',
-  key: "10323cadda64856135e4",
+  key: "1234567",
   cluster: "us2",
-  encrypted: true
+  encrypted: false,
+  wsHost: window.location.hostname,
+  wsPort: 6001,
+  disableStats: true
 });
 
 /***/ }),

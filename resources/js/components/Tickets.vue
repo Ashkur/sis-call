@@ -40,10 +40,17 @@
                 console.log(this.tickets)
             },
 
+            soundNotification() {
+                var audioPath = 'sound/news-ting.mp3';
+                var audio = new Audio(audioPath)
+                audio.play()
+            },
+
             listenChannel() {
                 window.Echo.channel('ticket-open')
                     .listen('.newTickets', () => {
                         this.fetchTickets()
+                        this.soundNotification()
                     })
             }
         },
@@ -51,7 +58,6 @@
         mounted() {
             this.listenChannel()
             this.fetchTickets()
-            console.log('Component mounted.')
         }
 
     }
