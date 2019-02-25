@@ -1,5 +1,5 @@
 <template>
-    <div>
+    <div data-app>
         <router-link :to="{ name: 'home' }">Home</router-link> |
         <router-link :to="{ name: 'dashboard' }">Hello World</router-link>
 

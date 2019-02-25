@@ -9,10 +9,13 @@ require('./bootstrap');
 
 window.Vue = require('vue');
 import VueRouter from 'vue-router'
+import Vuetify from 'vuetify'
+import 'vuetify/dist/vuetify.min.css'
 import Snotify from 'vue-snotify'
 import 'vue-snotify/styles/material.css'
 
 Vue.use(VueRouter)
+Vue.use(Vuetify)
 Vue.use(Snotify)
 
 //  TELAS
