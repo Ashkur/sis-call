@@ -19,6 +19,7 @@
                 <td>T.I</td>
             </tr>
         </table>
+
     </div>
 </template>
 
@@ -41,15 +42,20 @@
             },
 
             soundNotification() {
-                var audioPath = 'sound/news-ting.mp3';
+                var audioPath = 'sound/news-ting.wav';
                 var audio = new Audio(audioPath)
                 audio.play()
+            },
+
+            displayNotification() {
+                this.$snotify.warning('Um novo chamado!', 'Você tem um novo chamado!')
             },
 
             listenChannel() {
                 window.Echo.channel('ticket-open')
                     .listen('.newTickets', () => {
                         this.fetchTickets()
+                        this.displayNotification()
                         this.soundNotification()
                     })
             }

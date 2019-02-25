@@ -24,6 +24,11 @@ Vue.component('example-component', require('./components/ExampleComponent.vue').
 
 Vue.component('tickets', require('./components/Tickets.vue').default)
 
+import Snotify from 'vue-snotify'
+import 'vue-snotify/styles/material.css'
+
+Vue.use(Snotify)
+
 /**
  * Next, we will create a fresh Vue application instance and attach it to
  * the page. Then, you may begin adding components to this application

@@ -67,6 +67,7 @@
     <body>
         <div id="app">
             <tickets></tickets>
+            <vue-snotify></vue-snotify>
         </div>
         <script async src="{{ mix('js/app.js') }}"></script>
         <script>
