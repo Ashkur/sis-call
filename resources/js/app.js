@@ -8,6 +8,37 @@
 require('./bootstrap');
 
 window.Vue = require('vue');
+import VueRouter from 'vue-router'
+import Snotify from 'vue-snotify'
+import 'vue-snotify/styles/material.css'
+
+Vue.use(VueRouter)
+Vue.use(Snotify)
+
+//  TELAS
+import App from './screens/App'
+import Home from './screens/users/Home'
+import Dashboard from './screens/adms/dashboard'
+
+
+//  ROTA
+const router = new VueRouter ({
+    mode: 'history',
+    routes: [
+        {
+            path: '/',
+            name: 'home',
+            component: Home
+        },
+        {
+            path: '/adm',
+            name: 'dashboard',
+            component: Dashboard
+        }
+    ]
+})
+
+
 
 /**
  * The following block of code may be used to automatically register your
@@ -20,14 +51,11 @@ window.Vue = require('vue');
 // const files = require.context('./', true, /\.vue$/i)
 // files.keys().map(key => Vue.component(key.split('/').pop().split('.')[0], files(key).default))
 
-Vue.component('example-component', require('./components/ExampleComponent.vue').default)
+// Vue.component('example-component', require('./components/ExampleComponent.vue').default)
 
-Vue.component('tickets', require('./components/Tickets.vue').default)
+// Vue.component('tickets', require('./components/Tickets.vue').default)
 
-import Snotify from 'vue-snotify'
-import 'vue-snotify/styles/material.css'
 
-Vue.use(Snotify)
 
 /**
  * Next, we will create a fresh Vue application instance and attach it to
@@ -36,5 +64,7 @@ Vue.use(Snotify)
  */
 
 const app = new Vue({
-    el: '#app'
+    el: '#app',
+    components: { App },
+    router,
 });

@@ -66,13 +66,8 @@
     </head>
     <body>
         <div id="app">
-            <tickets></tickets>
-            <vue-snotify></vue-snotify>
+            <app></app>
         </div>
         <script async src="{{ mix('js/app.js') }}"></script>
-        <script>
-                //let audio = new Audio('sound/news-ting.mp3')
-                //audio.play()
-        </script>
     </body>
 </html>
