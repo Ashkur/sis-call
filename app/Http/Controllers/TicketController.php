@@ -17,6 +17,7 @@ class TicketController extends Controller
     public function store(Request $request) {
         $user = \App\User::find(1);
         $ticket = new Ticket;
+        $ticket->ocurrence = $request->ocurrence;
         $ticket->description = $request->description;
         $ticket->status = 'PENDENTE';
 

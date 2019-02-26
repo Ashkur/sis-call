@@ -1892,17 +1892,25 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
     return {
       headers: [{
-        text: 'CHAMADO',
+        text: 'Nº CHAMADO',
         align: 'center',
         sortable: true,
         value: 'name'
       }, {
-        text: 'DESCRIÇÃO',
-        value: 'description'
+        text: 'OCORRÊNCIA',
+        value: 'ocurrence'
       }, {
         text: 'STATUS',
         value: 'status'
@@ -1919,10 +1927,11 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
       tickets: [],
       dialog: false,
       commomProblems: ['Compartilhar pasta', 'Erro ao imprimir', 'Impressora offline', 'Impressora não instalada', 'Instalar aplicativo', 'Atualizar aplicativo', 'Não é possível acessar pasta compartilhada', 'Não é possível acessar determinado site', 'Problemas ao fazer login no OMNE', 'Sem acesso a internet', 'Sem acesso a rede', 'Hardware (Ex.: Mouse, Teclado, etc.) com defeito'],
-      ocurrency: {
-        title: '',
+      ticket: {
+        ocurrence: '',
         description: ''
-      }
+      },
+      expand: false
     };
   },
   methods: {
@@ -1966,18 +1975,23 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
       var _registerTicket = _asyncToGenerator(
       /*#__PURE__*/
       _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee2() {
-        var ocurrency, res;
+        var ticket, res;
         return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee2$(_context2) {
           while (1) {
             switch (_context2.prev = _context2.next) {
               case 0:
-                ocurrency = {
-                  description: this.ocurrency.description
+                ticket = {
+                  ocurrence: this.ticket.ocurrence,
+                  description: this.ticket.description
                 };
                 _context2.next = 3;
                 return fetch('api/tickets', {
                   method: 'post',
-                  body: JSON.stringify(ocurrency)
+                  headers: {
+                    'Accept': 'application/json, text/plain, */*',
+                    'Content-Type': 'application/json'
+                  },
+                  body: JSON.stringify(ticket)
                 });
 
               case 3:
@@ -1999,6 +2013,10 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 
       return registerTicket;
     }(),
+    stringTruncate: function stringTruncate(str, length) {
+      var dots = str.length > length ? '...' : '';
+      return str.substring(0, length) + dots;
+    },
     soundNotification: function soundNotification() {
       var audioPath = 'sound/news-ting.wav';
       var audio = new Audio(audioPath);
@@ -2021,6 +2039,7 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
   },
   mounted: function mounted() {
     this.fetchTickets();
+    this.listenChannel();
   }
 });
 
@@ -48758,32 +48777,31 @@ var render = function() {
                                       label: "Ocorrência"
                                     },
                                     model: {
-                                      value: _vm.ocurrency.description,
+                                      value: _vm.ticket.ocurrence,
                                       callback: function($$v) {
-                                        _vm.$set(
-                                          _vm.ocurrency,
-                                          "description",
-                                          $$v
-                                        )
+                                        _vm.$set(_vm.ticket, "ocurrence", $$v)
                                       },
-                                      expression: "ocurrency.description"
+                                      expression: "ticket.ocurrence"
                                     }
                                   }),
                                   _vm._v(" "),
-                                  _c(
-                                    "v-textarea",
-                                    {
-                                      attrs: {
-                                        name: "input-7-1",
-                                        label: "Descrição da ocorrência",
-                                        value: "",
-                                        hint:
-                                          "Descreva um problema não listado ou complemente as informações de uma ocorrência.",
-                                        rows: "2"
-                                      }
+                                  _c("v-textarea", {
+                                    attrs: {
+                                      name: "input-7-1",
+                                      label: "Descrição da ocorrência",
+                                      value: "",
+                                      hint:
+                                        "Descreva um problema não listado ou complemente as informações de uma ocorrência.",
+                                      rows: "2"
                                     },
-                                    [_vm._v(_vm._s(_vm.ocurrency.description))]
-                                  )
+                                    model: {
+                                      value: _vm.ticket.description,
+                                      callback: function($$v) {
+                                        _vm.$set(_vm.ticket, "description", $$v)
+                                      },
+                                      expression: "ticket.description"
+                                    }
+                                  })
                                 ],
                                 1
                               )
@@ -48846,32 +48864,65 @@ var render = function() {
             key: "items",
             fn: function(props) {
               return [
-                _c("td", [_vm._v(_vm._s(props.item.id))]),
-                _vm._v(" "),
-                _c("td", { staticClass: "text-xs-left" }, [
-                  _vm._v(_vm._s(props.item.description))
-                ]),
-                _vm._v(" "),
-                _c("td", { staticClass: "text-xs-left" }, [
-                  _vm._v(_vm._s(props.item.status))
-                ]),
-                _vm._v(" "),
-                _c("td", { staticClass: "text-xs-left" }, [
-                  _vm._v(_vm._s(props.item.created_at.date))
-                ]),
-                _vm._v(" "),
-                _c("td", { staticClass: "text-xs-left" }, [
-                  _vm._v(_vm._s(props.item.user.name))
-                ]),
-                _vm._v(" "),
-                _c("td", { staticClass: "text-xs-left" }, [_vm._v("IT")])
+                _c(
+                  "tr",
+                  {
+                    on: {
+                      click: function($event) {
+                        props.expanded = !props.expanded
+                      }
+                    }
+                  },
+                  [
+                    _c("td", { staticClass: "text-xs-left" }, [
+                      _vm._v(_vm._s(props.item.id))
+                    ]),
+                    _vm._v(" "),
+                    _c("td", { staticClass: "text-xs-left" }, [
+                      _vm._v(
+                        _vm._s(
+                          props.item.ocurrence
+                            ? props.item.ocurrence
+                            : _vm.stringTruncate(props.item.description, 50)
+                        )
+                      )
+                    ]),
+                    _vm._v(" "),
+                    _c("td", { staticClass: "text-xs-left" }, [
+                      _vm._v(_vm._s(props.item.status))
+                    ]),
+                    _vm._v(" "),
+                    _c("td", { staticClass: "text-xs-left" }, [
+                      _vm._v(_vm._s(props.item.created_at.date))
+                    ]),
+                    _vm._v(" "),
+                    _c("td", { staticClass: "text-xs-left" }, [
+                      _vm._v(_vm._s(props.item.user.name))
+                    ]),
+                    _vm._v(" "),
+                    _c("td", { staticClass: "text-xs-left" }, [_vm._v("IT")])
+                  ]
+                )
+              ]
+            }
+          },
+          {
+            key: "expand",
+            fn: function(props) {
+              return [
+                _c(
+                  "v-card",
+                  { attrs: { flat: "" } },
+                  [_c("v-card-text", [_vm._v(_vm._s(props.item.description))])],
+                  1
+                )
               ]
             }
           }
         ])
       }),
       _vm._v(" "),
-      _c("pre", [_vm._v("        " + _vm._s(_vm.$data.ocurrency) + "\n    ")])
+      _c("pre", [_vm._v("        " + _vm._s(_vm.$data.ticket) + "\n    ")])
     ],
     1
   )
@@ -91008,7 +91059,9 @@ window.Vue = __webpack_require__(/*! vue */ "./node_modules/vue/dist/vue.common.
 
 Vue.use(vue_router__WEBPACK_IMPORTED_MODULE_0__["default"]);
 Vue.use(vuetify__WEBPACK_IMPORTED_MODULE_1___default.a);
-Vue.use(vue_snotify__WEBPACK_IMPORTED_MODULE_3__["default"]); //  TELAS
+Vue.use(vue_snotify__WEBPACK_IMPORTED_MODULE_3__["default"], {
+  timeout: 5000
+}); //  TELAS
 
 
 

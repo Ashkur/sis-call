@@ -16,7 +16,8 @@ class CreateTicketsTable extends Migration
         Schema::create('tickets', function (Blueprint $table) {
             $table->increments('id');
             $table->unsignedInteger('user_id');
-            $table->text('description');
+            $table->text('ocurrence')->nullable();
+            $table->text('description')->nullable();
             $table->enum('status', ['RESOLVIDO', 'PENDENTE', 'NÃO RESOLVIDO']);
             $table->timestamps();
 

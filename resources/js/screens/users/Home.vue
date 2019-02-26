@@ -15,17 +15,18 @@
                                 <v-flex>
                                     <v-select
                                     :items="commomProblems"
-                                    v-model="ocurrency.description"
+                                    v-model="ticket.ocurrence"
                                     label="Ocorrência"
                                     ></v-select>
 
                                     <v-textarea
+                                        v-model="ticket.description"
                                         name="input-7-1"
                                         label="Descrição da ocorrência"
                                         value=""
                                         hint="Descreva um problema não listado ou complemente as informações de uma ocorrência."
                                         rows="2"
-                                        >{{ocurrency.description}}</v-textarea>
+                                        ></v-textarea>
                                 </v-flex>
                             </v-layout>
                         </v-container>
@@ -50,17 +51,24 @@
             class="elevation-1"
         >
             <template slot="items" slot-scope="props">
-                <td>{{ props.item.id }}</td>
-                <td class="text-xs-left">{{ props.item.description }}</td>
-                <td class="text-xs-left">{{ props.item.status }}</td>
-                <td class="text-xs-left">{{ props.item.created_at.date }}</td>
-                <td class="text-xs-left">{{ props.item.user.name }}</td>
-                <td class="text-xs-left">IT</td>
+                <tr @click="props.expanded = !props.expanded">
+                    <td class="text-xs-left">{{ props.item.id }}</td>
+                    <td class="text-xs-left">{{ props.item.ocurrence?props.item.ocurrence:stringTruncate(props.item.description, 50) }}</td>
+                    <td class="text-xs-left">{{ props.item.status }}</td>
+                    <td class="text-xs-left">{{ props.item.created_at.date }}</td>
+                    <td class="text-xs-left">{{ props.item.user.name }}</td>
+                    <td class="text-xs-left">IT</td>
+                </tr>
+            </template>
+            <template slot="expand" slot-scope="props">
+                <v-card flat>
+                    <v-card-text>{{ props.item.description }}</v-card-text>
+                </v-card>
             </template>
         </v-data-table>
 
         <pre>
-            {{$data.ocurrency}}
+            {{$data.ticket}}
         </pre>
     </div>
 
@@ -72,12 +80,12 @@
       return {
         headers: [
           {
-            text: 'CHAMADO',
+            text: 'Nº CHAMADO',
             align: 'center',
             sortable: true,
             value: 'name'
           },
-          { text: 'DESCRIÇÃO', value: 'description' },
+          { text: 'OCORRÊNCIA', value: 'ocurrence' },
           { text: 'STATUS', value: 'status' },
           { text: 'ABERTO EM', value: 'created_at' },
           { text: 'SERVIDOR', value: 'user' },
@@ -99,10 +107,11 @@
             'Sem acesso a rede',
             'Hardware (Ex.: Mouse, Teclado, etc.) com defeito'
         ],
-        ocurrency: {
-            title:'',
+        ticket: {
+            ocurrence:'',
             description: ''
-        }
+        },
+        expand: false,
       }
     },
 
@@ -115,18 +124,27 @@
         },
 
         async registerTicket() {
-            let ocurrency = {
-                description: this.ocurrency.description
+            let ticket = {
+                ocurrence: this.ticket.ocurrence,
+                description: this.ticket.description
             }
 
             const res = await fetch('api/tickets', {
                 method: 'post',
-                body: JSON.stringify(ocurrency)
+                headers: {
+                    'Accept': 'application/json, text/plain, */*',
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(ticket)
             })
 
             this.dialog = !this.dialog
-
             console.log(res)
+        },
+
+        stringTruncate (str, length) {
+            var dots = str.length > length ? '...' : '';
+            return str.substring(0, length) + dots;
         },
 
         soundNotification() {
@@ -147,10 +165,12 @@
                     this.soundNotification()
                 })
         }
+
     },
 
     mounted() {
         this.fetchTickets()
+        this.listenChannel()
     }
   }
 </script>

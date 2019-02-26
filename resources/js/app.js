@@ -16,7 +16,7 @@ import 'vue-snotify/styles/material.css'
 
 Vue.use(VueRouter)
 Vue.use(Vuetify)
-Vue.use(Snotify)
+Vue.use(Snotify, {timeout: 5000})
 
 //  TELAS
 import App from './screens/App'
