@@ -13,11 +13,11 @@
                         <v-container grid-list-md>
                             <v-layout wrap>
                                 <v-flex>
-                                    <v-select
-                                    :items="commomProblems"
-                                    v-model="ticket.ocurrence"
-                                    label="Ocorrência"
-                                    ></v-select>
+                                    <v-combobox
+                                        v-model="ticket.ocurrence"
+                                        :items="commomProblems"
+                                        label="Ocorrência"
+                                        ></v-combobox>
 
                                     <v-textarea
                                         v-model="ticket.description"

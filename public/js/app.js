@@ -48771,7 +48771,7 @@ var render = function() {
                               _c(
                                 "v-flex",
                                 [
-                                  _c("v-select", {
+                                  _c("v-combobox", {
                                     attrs: {
                                       items: _vm.commomProblems,
                                       label: "Ocorrência"
