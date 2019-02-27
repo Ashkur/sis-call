@@ -3,6 +3,7 @@
 namespace App\Http\Resources;
 
 use Illuminate\Http\Resources\Json\JsonResource;
+use Carbon\Carbon;
 
 class TicketResource extends JsonResource
 {
@@ -14,12 +15,14 @@ class TicketResource extends JsonResource
      */
     public function toArray($request)
     {
+        $carbon = new Carbon;
+
         return [
             'id' => $this->id,
             'ocurrence' => $this->ocurrence,
             'description' => $this->description,
             'status' => $this->status,
-            'created_at' => $this->created_at,
+            'created_at' => $carbon->toDayDateTimeString($this->created_at),
             'user' => $this->user
         ];
     }

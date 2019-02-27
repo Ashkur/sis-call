@@ -55,7 +55,7 @@
                     <td class="text-xs-left">{{ props.item.id }}</td>
                     <td class="text-xs-left">{{ props.item.ocurrence?props.item.ocurrence:stringTruncate(props.item.description, 50) }}</td>
                     <td class="text-xs-left">{{ props.item.status }}</td>
-                    <td class="text-xs-left">{{ props.item.created_at.date }}</td>
+                    <td class="text-xs-left">{{ props.item.created_at }}</td>
                     <td class="text-xs-left">{{ props.item.user.name }}</td>
                     <td class="text-xs-left">IT</td>
                 </tr>

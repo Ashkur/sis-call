@@ -48893,7 +48893,7 @@ var render = function() {
                     ]),
                     _vm._v(" "),
                     _c("td", { staticClass: "text-xs-left" }, [
-                      _vm._v(_vm._s(props.item.created_at.date))
+                      _vm._v(_vm._s(props.item.created_at))
                     ]),
                     _vm._v(" "),
                     _c("td", { staticClass: "text-xs-left" }, [
