@@ -15,14 +15,15 @@ class TicketResource extends JsonResource
      */
     public function toArray($request)
     {
-        $carbon = new Carbon;
+        $carbon = new Carbon($this->created_at);
+        $carbon->setlocale('pt_BR');
 
         return [
             'id' => $this->id,
             'ocurrence' => $this->ocurrence,
             'description' => $this->description,
             'status' => $this->status,
-            'created_at' => $carbon->toDayDateTimeString($this->created_at),
+            'created_at' => $carbon->format('jS \o\f F, Y G:i'),
             'user' => $this->user
         ];
     }

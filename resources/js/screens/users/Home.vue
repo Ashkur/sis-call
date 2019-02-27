@@ -48,6 +48,7 @@
         <v-data-table
             :headers="headers"
             :items="tickets"
+            :pagination.sync="pagination"
             class="elevation-1"
         >
             <template slot="items" slot-scope="props">
@@ -75,6 +76,7 @@
 </template>
 
 <script>
+
   export default {
     data () {
       return {
@@ -83,7 +85,7 @@
             text: 'Nº CHAMADO',
             align: 'center',
             sortable: true,
-            value: 'name'
+            value: 'id'
           },
           { text: 'OCORRÊNCIA', value: 'ocurrence' },
           { text: 'STATUS', value: 'status' },
@@ -94,6 +96,7 @@
         tickets: [],
         dialog: false,
         commomProblems: [
+            'Atualizar tabelas SEFIP',
             'Compartilhar pasta',
             'Erro ao imprimir',
             'Impressora offline',
@@ -112,6 +115,9 @@
             description: ''
         },
         expand: false,
+        pagination: {
+          sortBy: 'STATUS'
+        },
       }
     },
 

@@ -1900,6 +1900,7 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 //
 //
 //
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
     return {
@@ -1907,7 +1908,7 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
         text: 'Nº CHAMADO',
         align: 'center',
         sortable: true,
-        value: 'name'
+        value: 'id'
       }, {
         text: 'OCORRÊNCIA',
         value: 'ocurrence'
@@ -1926,12 +1927,15 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
       }],
       tickets: [],
       dialog: false,
-      commomProblems: ['Compartilhar pasta', 'Erro ao imprimir', 'Impressora offline', 'Impressora não instalada', 'Instalar aplicativo', 'Atualizar aplicativo', 'Não é possível acessar pasta compartilhada', 'Não é possível acessar determinado site', 'Problemas ao fazer login no OMNE', 'Sem acesso a internet', 'Sem acesso a rede', 'Hardware (Ex.: Mouse, Teclado, etc.) com defeito'],
+      commomProblems: ['Atualizar tabelas SEFIP', 'Compartilhar pasta', 'Erro ao imprimir', 'Impressora offline', 'Impressora não instalada', 'Instalar aplicativo', 'Atualizar aplicativo', 'Não é possível acessar pasta compartilhada', 'Não é possível acessar determinado site', 'Problemas ao fazer login no OMNE', 'Sem acesso a internet', 'Sem acesso a rede', 'Hardware (Ex.: Mouse, Teclado, etc.) com defeito'],
       ticket: {
         ocurrence: '',
         description: ''
       },
-      expand: false
+      expand: false,
+      pagination: {
+        sortBy: 'STATUS'
+      }
     };
   },
   methods: {
@@ -48858,7 +48862,16 @@ var render = function() {
       _vm._v(" "),
       _c("v-data-table", {
         staticClass: "elevation-1",
-        attrs: { headers: _vm.headers, items: _vm.tickets },
+        attrs: {
+          headers: _vm.headers,
+          items: _vm.tickets,
+          pagination: _vm.pagination
+        },
+        on: {
+          "update:pagination": function($event) {
+            _vm.pagination = $event
+          }
+        },
         scopedSlots: _vm._u([
           {
             key: "items",
