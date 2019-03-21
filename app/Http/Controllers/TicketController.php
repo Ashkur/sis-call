@@ -15,25 +15,22 @@ class TicketController extends Controller
     }
 
     public function store(Request $request) {
-        $user = \App\User::find(1);
+        $user = \App\User::find(10000);
         $ticket = new Ticket;
         $ticket->ocurrence = $request->ocurrence;
         $ticket->description = $request->description;
         $ticket->status = 'PENDENTE';
 
-        $user->tickets()->save($ticket);
-
-        $this->sendTicket($user->name);
+        try{
+            $user->tickets()->save($ticket);
+            $this->sendTicket($user->name);
+        }catch (Exception $e){
+            return abort('500', $e->getMessage());
+        }
+        
     }
 
     public function sendTicket($username) {
         event(new TicketOpen($username));
     }
-
-    // public function update(Request $request, Ticket $ticket) {
-    //     $user = \App\User::find(1);
-
-    //     $ticket->description = $request->description;
-    //     $ticket->status =
-    // }
 }

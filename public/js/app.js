@@ -1901,6 +1901,9 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 //
 //
 //
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
     return {
@@ -1935,7 +1938,9 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
       expand: false,
       pagination: {
         sortBy: 'STATUS'
-      }
+      },
+      error: false,
+      isLoadingTickets: false
     };
   },
   methods: {
@@ -1988,7 +1993,18 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
                   ocurrence: this.ticket.ocurrence,
                   description: this.ticket.description
                 };
-                _context2.next = 3;
+
+                if (!(!ticket.ocurrence && !ticket.description)) {
+                  _context2.next = 5;
+                  break;
+                }
+
+                this.error = true;
+                _context2.next = 11;
+                break;
+
+              case 5:
+                _context2.next = 7;
                 return fetch('api/tickets', {
                   method: 'post',
                   headers: {
@@ -1998,12 +2014,17 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
                   body: JSON.stringify(ticket)
                 });
 
-              case 3:
+              case 7:
                 res = _context2.sent;
                 this.dialog = !this.dialog;
+
+                if (res.status == 500) {
+                  alert('Não foi possível completar a ação.');
+                }
+
                 console.log(res);
 
-              case 6:
+              case 11:
               case "end":
                 return _context2.stop();
             }
@@ -48775,10 +48796,21 @@ var render = function() {
                               _c(
                                 "v-flex",
                                 [
+                                  _c("span", { staticClass: "text-danger" }, [
+                                    _vm._v(
+                                      _vm._s(
+                                        _vm.error
+                                          ? "Ao menos um dos campos deve ser preenchido."
+                                          : ""
+                                      )
+                                    )
+                                  ]),
+                                  _vm._v(" "),
                                   _c("v-combobox", {
                                     attrs: {
                                       items: _vm.commomProblems,
-                                      label: "Ocorrência"
+                                      label: "Ocorrência",
+                                      color: "#206eea"
                                     },
                                     model: {
                                       value: _vm.ticket.ocurrence,
@@ -48792,6 +48824,7 @@ var render = function() {
                                   _c("v-textarea", {
                                     attrs: {
                                       name: "input-7-1",
+                                      color: "#206eea",
                                       label: "Descrição da ocorrência",
                                       value: "",
                                       hint:
@@ -48872,67 +48905,81 @@ var render = function() {
             _vm.pagination = $event
           }
         },
-        scopedSlots: _vm._u([
-          {
-            key: "items",
-            fn: function(props) {
-              return [
-                _c(
-                  "tr",
-                  {
-                    on: {
-                      click: function($event) {
-                        props.expanded = !props.expanded
-                      }
-                    }
-                  },
-                  [
-                    _c("td", { staticClass: "text-xs-left" }, [
-                      _vm._v(_vm._s(props.item.id))
-                    ]),
-                    _vm._v(" "),
-                    _c("td", { staticClass: "text-xs-left" }, [
-                      _vm._v(
-                        _vm._s(
-                          props.item.ocurrence
-                            ? props.item.ocurrence
-                            : _vm.stringTruncate(props.item.description, 50)
-                        )
+        scopedSlots: _vm._u(
+          [
+            {
+              key: "items",
+              fn: function(props) {
+                return _vm.isLoadingTickets
+                  ? [
+                      _c(
+                        "tr",
+                        {
+                          on: {
+                            click: function($event) {
+                              props.expanded = !props.expanded
+                            }
+                          }
+                        },
+                        [
+                          _c("td", { staticClass: "text-xs-left" }, [
+                            _vm._v(_vm._s(props.item.id))
+                          ]),
+                          _vm._v(" "),
+                          _c("td", { staticClass: "text-xs-left" }, [
+                            _vm._v(
+                              _vm._s(
+                                props.item.ocurrence
+                                  ? props.item.ocurrence
+                                  : _vm.stringTruncate(
+                                      props.item.description,
+                                      50
+                                    )
+                              )
+                            )
+                          ]),
+                          _vm._v(" "),
+                          _c("td", { staticClass: "text-xs-left" }, [
+                            _vm._v(_vm._s(props.item.status))
+                          ]),
+                          _vm._v(" "),
+                          _c("td", { staticClass: "text-xs-left" }, [
+                            _vm._v(_vm._s(props.item.created_at))
+                          ]),
+                          _vm._v(" "),
+                          _c("td", { staticClass: "text-xs-left" }, [
+                            _vm._v(_vm._s(props.item.user.name))
+                          ]),
+                          _vm._v(" "),
+                          _c("td", { staticClass: "text-xs-left" }, [
+                            _vm._v("IT")
+                          ])
+                        ]
                       )
-                    ]),
-                    _vm._v(" "),
-                    _c("td", { staticClass: "text-xs-left" }, [
-                      _vm._v(_vm._s(props.item.status))
-                    ]),
-                    _vm._v(" "),
-                    _c("td", { staticClass: "text-xs-left" }, [
-                      _vm._v(_vm._s(props.item.created_at))
-                    ]),
-                    _vm._v(" "),
-                    _c("td", { staticClass: "text-xs-left" }, [
-                      _vm._v(_vm._s(props.item.user.name))
-                    ]),
-                    _vm._v(" "),
-                    _c("td", { staticClass: "text-xs-left" }, [_vm._v("IT")])
-                  ]
-                )
-              ]
+                    ]
+                  : undefined
+              }
+            },
+            {
+              key: "expand",
+              fn: function(props) {
+                return [
+                  _c(
+                    "v-card",
+                    { attrs: { flat: "" } },
+                    [
+                      _c("v-card-text", [
+                        _vm._v(_vm._s(props.item.description))
+                      ])
+                    ],
+                    1
+                  )
+                ]
+              }
             }
-          },
-          {
-            key: "expand",
-            fn: function(props) {
-              return [
-                _c(
-                  "v-card",
-                  { attrs: { flat: "" } },
-                  [_c("v-card-text", [_vm._v(_vm._s(props.item.description))])],
-                  1
-                )
-              ]
-            }
-          }
-        ])
+          ],
+          true
+        )
       }),
       _vm._v(" "),
       _c("pre", [_vm._v("        " + _vm._s(_vm.$data.ticket) + "\n    ")])
@@ -91176,8 +91223,8 @@ if (token) {
 window.Pusher = __webpack_require__(/*! pusher-js */ "./node_modules/pusher-js/dist/web/pusher.js");
 window.Echo = new laravel_echo__WEBPACK_IMPORTED_MODULE_0__["default"]({
   broadcaster: 'pusher',
-  key: "1234567",
-  cluster: "us2",
+  key: "123456",
+  cluster: "mt1",
   encrypted: false,
   wsHost: window.location.hostname,
   wsPort: 6001,

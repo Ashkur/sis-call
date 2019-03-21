@@ -6,22 +6,25 @@
 
                 <v-card>
                     <v-card-title>
-                        <span class="headline">NOVO CHAMADO</span>
+                        <span class="headline">NOVO CHAMADO</span>                        
                     </v-card-title>
 
-                    <v-card-text>
+                    <v-card-text>                        
                         <v-container grid-list-md>
                             <v-layout wrap>
                                 <v-flex>
+                                    <span class="text-danger">{{ error? "Ao menos um dos campos deve ser preenchido.": "" }}</span>
                                     <v-combobox
                                         v-model="ticket.ocurrence"
                                         :items="commomProblems"
                                         label="Ocorrência"
+                                        color="#206eea"
                                         ></v-combobox>
 
                                     <v-textarea
                                         v-model="ticket.description"
                                         name="input-7-1"
+                                        color="#206eea"
                                         label="Descrição da ocorrência"
                                         value=""
                                         hint="Descreva um problema não listado ou complemente as informações de uma ocorrência."
@@ -118,6 +121,7 @@
         pagination: {
           sortBy: 'STATUS'
         },
+        error: false,
       }
     },
 
@@ -135,17 +139,25 @@
                 description: this.ticket.description
             }
 
-            const res = await fetch('api/tickets', {
-                method: 'post',
-                headers: {
-                    'Accept': 'application/json, text/plain, */*',
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify(ticket)
-            })
+            if(!ticket.ocurrence && !ticket.description) {
+                this.error = true;
+                
+            } else {
+                const res = await fetch('api/tickets', {
+                    method: 'post',
+                    headers: {
+                        'Accept': 'application/json, text/plain, */*',
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(ticket)
+                })
 
-            this.dialog = !this.dialog
-            console.log(res)
+                this.dialog = !this.dialog
+
+                if(res.status == 500){alert('Não foi possível completar a ação.')}
+                console.log(res)
+            }            
+            
         },
 
         stringTruncate (str, length) {
