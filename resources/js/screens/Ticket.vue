@@ -96,6 +96,7 @@
 </template>
 
 <script>
+import jsPDF from 'jspdf'
 import TicketStatus from '.././components/TicketStatus'
 export default {
     props: ['id'],
@@ -147,6 +148,9 @@ export default {
 
         printTicket() {
             console.log('printing ticket')
+            var doc = new jsPDF()
+            doc.text('Hello World!', 10, 10)
+            doc.save('a4.pdf')
         },
 
         consolelog(title){
