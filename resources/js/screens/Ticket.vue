@@ -23,7 +23,7 @@
                         </div>
 
                         <div style="float: right">
-                            <v-chip color="warning" text-color="white" class="headline">{{ticket.status}}</v-chip>              
+                            <ticketstatus :status=ticket.status class="headline"/>              
                         </div>
                     </div>
 
@@ -35,7 +35,8 @@
                     </div>
 
                     <div class="m-20">
-                        <div class="headline">{{ticket.description}}</div>
+                        <div class="headline" v-if="ticket.description!=null">{{ ticket.description}}</div>
+                        <div class="headline" v-else>Nenhuma descrição informada</div>
                         <div class="subheading">Descrição</div>
                     </div>
 
@@ -95,8 +96,13 @@
 </template>
 
 <script>
+import TicketStatus from '.././components/TicketStatus'
 export default {
     props: ['id'],
+
+    components: {
+        ticketstatus: TicketStatus
+    },
 
     data() {
         return{

@@ -10,7 +10,7 @@
                     <td class="text-xs-left">{{ props.item.id }}</td>
                     <td class="text-xs-left">{{ props.item.ocurrence?props.item.ocurrence:stringTruncate(props.item.description, 50) }}</td>
                     <td class="text-xs-left">
-                        <v-chip color="warning">{{ props.item.status }}</v-chip>
+                        <ticketstatus :status=props.item.status />
                     </td>
                     <td class="text-xs-left">{{ props.item.created_at }}</td>
                     <td class="text-xs-left">{{ props.item.user.name }}</td>
@@ -42,7 +42,8 @@
             </template>
             <template slot="expand" slot-scope="props">
                 <v-card flat>
-                    <v-card-text>{{ props.item.description }}</v-card-text>
+                    <v-card-text v-if="props.item.description!=null">{{ props.item.description}}</v-card-text>
+                    <v-card-text v-else>Nenhuma descrição informada</v-card-text>
                 </v-card>
             </template>
         </v-data-table>
@@ -54,8 +55,12 @@
 </template>
 
 <script>
-export default {
+import TicketStatus from '../../components/TicketStatus'
 
+export default {
+    components: {
+        ticketstatus: TicketStatus
+    },
     data() {
         return {
             headers: [
