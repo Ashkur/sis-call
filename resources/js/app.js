@@ -22,6 +22,7 @@ Vue.use(Snotify, {timeout: 5000})
 import App from './screens/App'
 import Home from './screens/users/Home'
 import Dashboard from './screens/adms/dashboard'
+import Ticket from './screens/Ticket'
 
 
 //  ROTA
@@ -30,13 +31,18 @@ const router = new VueRouter ({
     routes: [
         {
             path: '/',
-            name: 'home',
-            component: Home
+            name: 'Home',
+            component: Dashboard
         },
         {
             path: '/adm',
-            name: 'dashboard',
+            name: 'Dashboard',
             component: Dashboard
+        },
+        {
+            path: 'tickets/:id',
+            name: 'TicketDetail',
+            component: Ticket
         }
     ]
 })

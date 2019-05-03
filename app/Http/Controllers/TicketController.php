@@ -15,7 +15,7 @@ class TicketController extends Controller
     }
 
     public function store(Request $request) {
-        $user = \App\User::find(10000);
+        $user = \App\User::find(1);
         $ticket = new Ticket;
         $ticket->ocurrence = $request->ocurrence;
         $ticket->description = $request->description;
@@ -26,8 +26,11 @@ class TicketController extends Controller
             $this->sendTicket($user->name);
         }catch (Exception $e){
             return abort('500', $e->getMessage());
-        }
-        
+        }        
+    }
+
+    public function show($id) {
+        return new TicketResource(Ticket::find($id));
     }
 
     public function sendTicket($username) {
