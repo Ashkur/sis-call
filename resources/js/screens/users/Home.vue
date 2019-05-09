@@ -64,6 +64,17 @@
                     <td class="text-xs-left">{{ props.item.created_at }}</td>
                     <td class="text-xs-left">{{ props.item.user.name }}</td>
                     <td class="text-xs-left">IT</td>
+                    <td class="text-xs-left">
+                        <router-link 
+                            :to="{
+                                name:'TicketDetail', 
+                                params: {
+                                    id:props.item.id,
+                                }
+                            }">
+                            <v-icon large>assignment</v-icon>
+                        </router-link>      
+                    </td>
                 </tr>
             </template>
             <template slot="expand" slot-scope="props">
@@ -100,7 +111,8 @@ export default {
           { text: 'STATUS', value: 'status' },
           { text: 'ABERTO EM', value: 'created_at' },
           { text: 'SERVIDOR', value: 'user' },
-          { text: 'SETOR', value: 'setor' }
+          { text: 'SETOR', value: 'setor' },
+          { text: 'DETALHES', value: ''}
         ],
         tickets: [],
         dialog: false,
