@@ -198,7 +198,7 @@ export default {
                     text.content.push(
                         {
                             text: [
-                                'O técnico responsável pela ocorrência é o servidor',
+                                'O técnico responsável pela ocorrencia é o servidor',
                                 {
                                     text: ' Uriel Carneiro.', 
                                     bold: true
