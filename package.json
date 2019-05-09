@@ -24,8 +24,8 @@
         "vue-template-compiler": "^2.6.6"
     },
     "dependencies": {
-        "jspdf": "^1.5.3",
         "laravel-echo": "^1.5.3",
+        "pdfmake": "^0.1.56",
         "pusher-js": "^4.4.0",
         "vue-router": "^3.0.2",
         "vue-snotify": "^3.2.1",

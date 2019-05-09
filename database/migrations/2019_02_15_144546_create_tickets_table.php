@@ -18,7 +18,7 @@ class CreateTicketsTable extends Migration
             $table->unsignedInteger('user_id');
             $table->text('ocurrence')->nullable();
             $table->text('description')->nullable();
-            $table->enum('status', ['RESOLVIDO', 'PENDENTE', 'NÃO RESOLVIDO']);
+            $table->enum('status', ['EM ABERTO', 'RESOLVIDO', 'PENDENTE', 'NÃO RESOLVIDO']);
             $table->timestamps();
 
             $table->foreign('user_id')
