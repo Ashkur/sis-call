@@ -13,6 +13,49 @@
     </v-container>
     
     <v-container grid-list-md v-else>
+        <v-dialog
+            v-model="dialog"
+            max-width="600px">
+
+            <v-card>
+                <v-card-title
+                    class="headline lighten-2"
+                    primary-title>
+                    Finalizar Chamado
+                </v-card-title>
+                
+                <v-card-text>
+                    <v-radio-group v-model="solution.state" :mandatory="false">
+                        <v-radio label="RESOLVIDO" value="RESOLVIDO"></v-radio>
+                        <v-radio label="NÃO RESOLVIDO" value="NÃO RESOLVIDO"></v-radio>                                                          
+                    </v-radio-group>
+                    <span class="text-danger" v-if="error">Você deve preencher o campo <b>descrição</b>.</span>
+                    <v-textarea
+                        class=".fontfamily"
+                        v-model="solution.description"
+                        color="#206eea"
+                        label="Descrição da solução"
+                        value=""
+                        hint="Descreva como ocorreu a solução do problema ou o motivo de não ser solucionado."
+                        rows="2"
+                        ></v-textarea>
+                </v-card-text>                
+
+                <v-divider></v-divider>
+
+                <v-card-actions>
+                    <v-spacer></v-spacer>
+                    <v-btn
+                        color="primary"
+                        flat
+                        @click="dialog = false"
+                    >
+                        Confirmar
+                    </v-btn>
+                </v-card-actions>
+            </v-card>
+        </v-dialog>
+
         <v-layout row wrap>
             <v-flex md8>
                 <div>
@@ -109,9 +152,15 @@ export default {
 
     data() {
         return{
+            dialog: false,
             isLoading: true,
+            error: false,
             ticket: [],
             user: [],
+            solution: {
+                state: 'RESOLVIDO',
+                description: '',
+            }, 
             items: [
                 { 
                     title: 'Atender', 
@@ -119,9 +168,9 @@ export default {
                     action: this.answerCall
                 },
                 { 
-                    title: 'Adicionar Solução', 
-                    icon: 'comment',
-                    action: this.sendComment
+                    title: 'Finalizar Chamado', 
+                    icon: 'done',
+                    action: this.finalizarChamado
                 },
                 { 
                     title: 'Gerar PDF', 
@@ -267,10 +316,14 @@ export default {
 
         answerCall() {
             console.log("responder chamado")
+            // registraTecnico()
+            // notificaUsuario()
+            this.ticket.status = "EM ANDAMENTO"
         },
 
-        sendComment() {
+        finalizarChamado() {
             console.log('sendComment')
+            this.dialog = true;
         },
 
         generatePdf() {

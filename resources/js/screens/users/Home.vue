@@ -23,7 +23,6 @@
 
                                     <v-textarea
                                         v-model="ticket.description"
-                                        name="input-7-1"
                                         color="#206eea"
                                         label="Descrição da ocorrência"
                                         value=""
