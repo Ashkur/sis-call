@@ -23,6 +23,7 @@ import App from './screens/App'
 import Home from './screens/users/Home'
 import Dashboard from './screens/adms/dashboard'
 import Ticket from './screens/Ticket'
+import RedefinirSenha from './screens/RedefinirSenha'
 
 
 //  ROTA
@@ -40,9 +41,14 @@ const router = new VueRouter ({
             component: Dashboard
         },
         {
-            path: 'tickets/:id',
+            path: '/tickets/:id',
             name: 'TicketDetail',
             component: Ticket
+        },
+        {   
+            path: '/reset_password',
+            name: 'RedefinirSenha',
+            component: RedefinirSenha
         }
     ]
 })
