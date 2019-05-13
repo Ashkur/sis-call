@@ -27,7 +27,7 @@ import Ticket from './screens/Ticket'
 
 //  ROTA
 const router = new VueRouter ({
-    mode: 'history',
+    
     routes: [
         {
             path: '/',
@@ -35,7 +35,7 @@ const router = new VueRouter ({
             component: Home
         },
         {
-            path: '/adm',
+            path: '/dashboard',
             name: 'Dashboard',
             component: Dashboard
         },

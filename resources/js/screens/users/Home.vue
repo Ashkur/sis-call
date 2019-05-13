@@ -43,9 +43,7 @@
             </v-dialog>
         </v-layout>
 
-        <div class="text-align:center">
-            <h2>Meus Chamados</h2>
-        </div>
+        <h2>Meus Chamados</h2>
 
         <v-data-table
             :headers="headers"
@@ -144,6 +142,7 @@ export default {
 
     methods: {
         async fetchTickets () {
+            console.log('fetchTickets')
             const res = await fetch('api/tickets')
             const tickets = await res.json()
             this.tickets = tickets.data
@@ -151,6 +150,7 @@ export default {
         },
 
         async registerTicket() {
+            console.log('registerTicket')
             let ticket = {
                 ocurrence: this.ticket.ocurrence,
                 description: this.ticket.description
@@ -186,13 +186,16 @@ export default {
             var audioPath = 'sound/news-ting.wav';
             var audio = new Audio(audioPath)
             audio.play()
+            console.log('soundNotification')
         },
 
         displayNotification() {
+            console.log('displayNotification')
             this.$snotify.success('Chamado registrado!')
         },
 
         listenChannel() {
+            console.log('listenChannel')
             window.Echo.channel('ticket-open')
                 .listen('.newTickets', () => {
                     this.fetchTickets()
@@ -203,9 +206,14 @@ export default {
 
     },
 
-    mounted() {
-        this.fetchTickets()
-        this.listenChannel()
-    }
+    async mounted() {
+        await this.fetchTickets()
+        await this.listenChannel()
+    },
+
+    destroyed: function () {
+            window.Echo.channel('ticket-open')
+                .stopListening('.newTickets')
+        },
   }
 </script>
