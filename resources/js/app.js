@@ -16,12 +16,13 @@ import 'vue-snotify/styles/material.css'
 
 Vue.use(VueRouter)
 Vue.use(Vuetify)
-Vue.use(Snotify, {timeout: 5000})
+Vue.use(Snotify, {timeout: 8000})
 
 //  TELAS
 import App from './screens/App'
 import Home from './screens/users/Home'
-import Dashboard from './screens/adms/dashboard'
+import Dashboard from './screens/adms/Dashboard'
+import Setor from './screens/adms/Setor'
 import Ticket from './screens/Ticket'
 import RedefinirSenha from './screens/RedefinirSenha'
 
@@ -49,6 +50,11 @@ const router = new VueRouter ({
             path: '/reset_password',
             name: 'RedefinirSenha',
             component: RedefinirSenha
+        },
+        {
+            path: '/departments',
+            name: 'Setor',
+            component: Setor
         }
     ]
 })

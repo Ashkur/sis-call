@@ -48,6 +48,7 @@ export default {
             { title: 'Início', icon: 'home', screen: 'Home' },
             { title: 'Dashboard', icon: 'dashboard', screen: 'Dashboard' },
             { title: 'Redefinir Senha', icon: 'vpn_key', screen: 'RedefinirSenha'},
+            { title: 'Setores', icon: '', screen: 'Setor'},
             { title: 'Sair'}
         ]
       }
