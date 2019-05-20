@@ -197,7 +197,7 @@ export default {
                     break;
                 case 404:
                     let textError = 'SETOR NÃO ENCONTRADO!'
-                    this.showsSnackbarError(text)
+                    this.showsSnackbarError(textError)
                     break;
                 default:
                     let error = await res.json()
