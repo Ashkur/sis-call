@@ -14,10 +14,11 @@
                         <v-container grid-list-md>
                             <v-layout wrap>
                                 <v-flex>
-                                    <span class="text-danger">{{ error? "O nome do setor está vazio!": "" }}</span>
                                     <v-text-field
-                                        v-model="department.name"
+                                        v-model.trim="department.name"
                                         label="Nome"
+                                        :error-messages="nameErrors"
+                                        required
                                     ></v-text-field>
                                 </v-flex>
                             </v-layout>
@@ -41,6 +42,7 @@
 
         <h2>Setores</h2>
         <v-data-table
+            :loading="isTableLoading"
             :headers="headers"
             :items="departments"
             class="elevation-1 text-xs-center"
@@ -75,7 +77,10 @@
 </template>
 
 <script>
+import { required, maxLength } from 'vuelidate/lib/validators'
+
 export default {
+
     data() {
         return {
             headers: [
@@ -100,25 +105,40 @@ export default {
                 text: '',
                 color: ''
             },
-            department: {name: ''},
+            department: {
+                name: ''
+            },
             departments: [],
-            error: '',
+            errors: [],
             newDepartmentDialog: false,
-            editMode: false
+            editMode: false,
+            isTableLoading: false,
         }
     },
+    validations: {
+        department: {
+            name: {
+                required,
+                maxLength: maxLength(255)
+            }            
+        },
+    },
+
     methods: {
         async fetchDepartments() {
+            this.isTableLoading = true
             const res = await fetch('api/departments')
             const departments = await res.json()
             this.departments = departments.data
+            this.isTableLoading = false
             console.log(this.departments)
         },
+
         async registerDepartment() {
-            if(!this.department) {
-                this.error = true;
-                
-            } else {
+            this.isTableLoading = true
+            this.$v.$touch()
+
+            if(!this.$v.department.$invalid) {
                 const res = await fetch('api/departments', {
                     method: 'post',
                     headers: {
@@ -142,19 +162,22 @@ export default {
                         alert(`Não foi possível completar a ação.\n CÓDIGO DO ERRO: ${error}`)
                         break;
                 }         
-            }            
+            }
+            this.isTableLoading = false
         },
+
         async openUpdateDialog(department) {
             this.editMode = true
             this.department = department
             this.newDepartmentDialog = !this.newDepartmentDialog
         },
-        async updateDepartment() {            
-            console.log(this.department)
-            if(!this.department) {
-                this.error = true;
-                
-            } else {
+
+        async updateDepartment() {   
+            this.isTableLoading = true    
+
+            this.$v.$touch()
+
+            if(!this.$v.department.$invalid) {
                 const res = await fetch(`api/departments/${this.department.id}`, {
                     method: 'put',
                     headers: {
@@ -180,11 +203,15 @@ export default {
                         let error = await res.json()
                         alert(`Não foi possível completar a ação.\n CÓDIGO DO ERRO: ${error}`)
                         break;
-                }             
-            }
-            this.editMode = false
+                }   
+                
+                this.editMode = false                
+            }            
+
+            this.isTableLoading = false
         },
         async deleteDepartment(id) {
+            this.isTableLoading = true
             const res = await fetch(`api/departments/${id}`, {
                 method: 'delete',
             })
@@ -205,6 +232,7 @@ export default {
                     this.showsSnackbarSuccess(textSuccess)
                     break;
             }
+            this.isTableLoading = false
         },
         showsSnackbarSuccess(text) {
             this.snackbar.status = true
@@ -219,9 +247,20 @@ export default {
         cancelEdit() {
             this.newDepartmentDialog = false
             this.editMode = false
+            $v.$reset
         },
         openRegisterDialog() {
-            this.department = {name: ''}
+            this.department = { name: "" }
+        },
+    },
+
+    computed: {
+        nameErrors () {
+            const errors = []
+            if (!this.$v.department.name.$dirty) return errors
+            !this.$v.department.name.maxLength && errors.push('Limite máximo do tamanho do nome é de 255 caracteres')
+            !this.$v.department.name.required && errors.push('Informe um nome.')
+            return errors
         }
     },
 

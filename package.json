@@ -25,10 +25,12 @@
     },
     "dependencies": {
         "laravel-echo": "^1.5.3",
+        "npm": "^6.9.0",
         "pdfmake": "^0.1.56",
         "pusher-js": "^4.4.0",
         "vue-router": "^3.0.2",
         "vue-snotify": "^3.2.1",
+        "vuelidate": "^0.7.4",
         "vuetify": "^1.5.2"
     }
 }

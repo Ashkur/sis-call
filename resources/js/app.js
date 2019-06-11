@@ -13,7 +13,9 @@ import Vuetify from 'vuetify'
 import 'vuetify/dist/vuetify.min.css'
 import Snotify from 'vue-snotify'
 import 'vue-snotify/styles/material.css'
+import Vuelidate from 'vuelidate'
 
+Vue.use(Vuelidate)
 Vue.use(VueRouter)
 Vue.use(Vuetify)
 Vue.use(Snotify, {timeout: 8000})

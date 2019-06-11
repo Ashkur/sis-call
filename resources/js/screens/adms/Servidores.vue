@@ -81,7 +81,7 @@
                 <td>
                     <v-btn flat color="blue" @click="openUpdateDialog(props.item)">Editar</v-btn>
                     |
-                    <v-btn flat color="red" @click="deleteEmployee(props.item.id)" :loading="isDeleteLoading">Excluir</v-btn>
+                    <v-btn flat color="red" @click="deleteEmployee(props.item.id)">Excluir</v-btn>
                 </td>
             </template>
         </v-data-table>
