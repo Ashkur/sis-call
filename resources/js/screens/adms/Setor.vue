@@ -115,6 +115,7 @@ export default {
             isTableLoading: false,
         }
     },
+    
     validations: {
         department: {
             name: {
