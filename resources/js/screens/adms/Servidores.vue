@@ -16,18 +16,21 @@
                                 <v-flex>
                                     <span class="text-danger">{{ error? "Todos os campos devem ser preenchidos!": "" }}</span>
                                     <v-text-field
-                                        v-model="employee.name"
+                                        v-model.trim="employee.name"
+                                        :error-messages="nameErrors"
                                         label="Nome"
                                     ></v-text-field>
 
                                     <v-text-field
-                                        v-model="employee.login"
+                                        v-model.trim="employee.login"
+                                        :error-messages="loginErrors"
                                         label="Login"
                                     ></v-text-field>
 
                                     <v-text-field
                                         v-if="editMode == false"
-                                        v-model="employee.password"
+                                        v-model.trim="employee.password"
+                                        :error-messages="passwordErrors"
                                         :append-icon="showPass1 ? 'visibility' : 'visibility_off'"
                                         :type="showPass1 ? 'text' : 'password'"
                                         label="Senha"
@@ -37,7 +40,8 @@
                                     ></v-text-field>
 
                                     <v-combobox
-                                        v-model="employee.department"
+                                        v-model.trim="employee.department"
+                                        :error-messages="departmentErrors"
                                         :items="departments"
                                         item-text="name"
                                         item-value="id"
@@ -105,6 +109,8 @@
 </template>
 
 <script>
+import { required, maxLength } from 'vuelidate/lib/validators'
+
 export default {
     data() {
         return {
@@ -157,6 +163,27 @@ export default {
             showPass1: false,
             isRegisterLoading: false,
             isUpdateLoading: false,
+            
+        }
+    },
+
+    validations: {
+        employee: {
+            name: {
+                required,
+                maxLength: maxLength(255)
+            },
+            login: {
+                required,
+                maxLength: maxLength(255)
+            },
+            password: {
+                required,
+                maxLength: maxLength(255)
+            },
+            department: {
+                required,
+            }
         }
     },
 
@@ -180,11 +207,10 @@ export default {
         },
 
         async registerEmployee() {
-            this.loadingBtnRegister()
-            if(!this.employee.name ||  !this.employee.login || !this.employee.password || !this.employee.department) {
-                this.error = true;
-                
-            } else {
+
+            this.$v.$touch()
+
+            if(!this.$v.employee.$invalid) {
 
                 let employee = {
                     name: this.employee.name,
@@ -217,7 +243,6 @@ export default {
                         break;
                 }         
             }    
-            this.loadingBtnRegister()        
         },
 
         async openUpdateDialog(employee) {
@@ -227,11 +252,10 @@ export default {
         },
 
         async updateEmployee() {
-            this.loadingBtnUpdate()
-            if(!this.employee.name ||  !this.employee.login || !this.employee.department) {
-                this.error = true;
-                
-            } else {
+
+            this.$v.$touch()
+
+            if(!this.$v.employee.name.$invalid || !this.$v.employee.login.$invalid || !this.$v.employee.department.$invalid) {
                 this.employeeDialog = !this.employeeDialog
 
                 let employee = {
@@ -268,7 +292,6 @@ export default {
                 
                 this.editMode = false
             }
-            this.loadingBtnUpdate()
         },
         
         cancelEdit() {
@@ -320,6 +343,36 @@ export default {
         loadingBtnRegister(){
             this.isRegisterLoading = !this.isRegisterLoading
         },
+    },
+
+    computed: {
+        nameErrors () {
+            const errors = []
+            if (!this.$v.employee.name.$dirty) return errors
+            !this.$v.employee.name.maxLength && errors.push('Limite máximo do tamanho do nome é de 255 caracteres')
+            !this.$v.employee.name.required && errors.push('Informe um nome.')
+            return errors
+        },
+        loginErrors () {
+            const errors = []
+            if (!this.$v.employee.login.$dirty) return errors
+            !this.$v.employee.login.maxLength && errors.push('Limite máximo do tamanho do nome é de 255 caracteres')
+            !this.$v.employee.login.required && errors.push('Informe um login.')
+            return errors
+        },
+        passwordErrors () {
+            const errors = []
+            if (!this.$v.employee.password.$dirty) return errors
+            !this.$v.employee.password.maxLength && errors.push('Limite máximo do tamanho do nome é de 255 caracteres')
+            !this.$v.employee.password.required && errors.push('Informe uma senha.')
+            return errors
+        },
+        departmentErrors () {
+            const errors = []
+            if (!this.$v.employee.department.$dirty) return errors
+            !this.$v.employee.department.required && errors.push('Informe um setor.')
+            return errors
+        }
     },
 
     async mounted() {
