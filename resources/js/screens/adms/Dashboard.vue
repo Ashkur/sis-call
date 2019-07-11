@@ -6,6 +6,7 @@
             :headers="headers"
             :items="tickets"
             :pagination.sync="pagination"
+            :no-data-text="noDataText"
             class="elevation-1">
             <template slot="items" slot-scope="props">
                 <tr @click="props.expanded = !props.expanded">
@@ -86,6 +87,7 @@ export default {
                 { title: 'Atender', link: '/' },
                 { title: 'Detalhes'},
             ],
+            noDataText: 'Nenhum chamado registrado até o momento.',
             tickets: [],
             isTableLoading: false
         }

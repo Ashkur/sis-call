@@ -45,6 +45,7 @@
             :loading="isTableLoading"
             :headers="headers"
             :items="departments"
+            :no-data-text="noDataText"
             class="elevation-1 text-xs-center"
             >
             <template v-slot:items="props">
@@ -108,6 +109,7 @@ export default {
             department: {
                 name: ''
             },
+            noDataText: 'Nenhum setor regitrado até o momento.',
             departments: [],
             errors: [],
             newDepartmentDialog: false,

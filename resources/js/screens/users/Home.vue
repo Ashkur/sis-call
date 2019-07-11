@@ -50,6 +50,7 @@
             :headers="headers"
             :items="tickets"
             :pagination.sync="pagination"
+            :no-data-text="noDataText"
             class="elevation-1"
         >
             <template slot="items" slot-scope="props">
@@ -112,6 +113,7 @@ export default {
           { text: 'SETOR', value: 'setor' },
           { text: 'DETALHES', value: ''}
         ],
+        noDataText: 'Nenhum chamado registrado até o momento.',
         tickets: [],
         dialog: false,
         commomProblems: [
