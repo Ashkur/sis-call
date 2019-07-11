@@ -46,6 +46,7 @@
         <h2>Meus Chamados</h2>
 
         <v-data-table
+            :loading="isTableLoading"
             :headers="headers"
             :items="tickets"
             :pagination.sync="pagination"
@@ -137,20 +138,24 @@ export default {
           sortBy: 'STATUS'
         },
         error: false,
+        isTableLoading: false
       }
     },
 
     methods: {
         async fetchTickets () {
+            this.isTableLoading = true
             console.log('fetchTickets')
             const res = await fetch('api/tickets')
             const tickets = await res.json()
             this.tickets = tickets.data
             console.log(this.tickets)
+            this.isTableLoading = false
         },
 
         async registerTicket() {
             console.log('registerTicket')
+            this.isTableLoading = true
             let ticket = {
                 ocurrence: this.ticket.ocurrence,
                 description: this.ticket.description
@@ -173,7 +178,8 @@ export default {
 
                 if(res.status == 500){alert('Não foi possível completar a ação.')}
                 console.log(res)
-            }            
+            }
+            this.isTableLoading = false            
             
         },
 

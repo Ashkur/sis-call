@@ -2,6 +2,7 @@
     <v-container>
         <h2>Todos os Chamados</h2>        
         <v-data-table
+            :loading="this.isTableLoading"
             :headers="headers"
             :items="tickets"
             :pagination.sync="pagination"
@@ -85,16 +86,19 @@ export default {
                 { title: 'Atender', link: '/' },
                 { title: 'Detalhes'},
             ],
-            tickets: []
+            tickets: [],
+            isTableLoading: false
         }
     },
 
     methods: {
         async fetchTickets () {
+            this.isTableLoading = true
             const res = await fetch('api/tickets')
             const tickets = await res.json()
             this.tickets = tickets.data
             console.log(this.tickets)
+            this.isTableLoading = false
         },
 
         stringTruncate (str, length) {
