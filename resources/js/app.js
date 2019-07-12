@@ -28,6 +28,7 @@ import Setor from './screens/adms/Setor'
 import Ticket from './screens/Ticket'
 import RedefinirSenha from './screens/RedefinirSenha'
 import Servidores from './screens/adms/Servidores'
+import Tecnicos from './screens/adms/Tecnicos'
 
 
 //  ROTA
@@ -60,9 +61,14 @@ const router = new VueRouter ({
             component: Setor
         },
         {
-            path: '/Servidores',
+            path: '/servidores',
             name: 'Servidores',
             component: Servidores
+        },
+        {
+            path: '/tecnicos',
+            name: 'Tecnicos',
+            component: Tecnicos
         }
     ]
 })

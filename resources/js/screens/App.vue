@@ -50,6 +50,7 @@ export default {
             { title: 'Redefinir Senha', icon: 'vpn_key', screen: 'RedefinirSenha'},
             { title: 'Setores', icon: '', screen: 'Setor'},
             { title: 'Servidores', icon: '', screen: 'Servidores'},
+            { title: 'Técnicos', icon: '', screen: 'Tecnicos'},
             { title: 'Sair'}
         ]
       }
