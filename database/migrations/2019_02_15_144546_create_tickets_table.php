@@ -19,7 +19,7 @@ class CreateTicketsTable extends Migration
             $table->text('ocurrence')->nullable();
             $table->text('description')->nullable();
             $table->enum('status', ['PENDENTE', 'EM ANDAMENTO',  'RESOLVIDO', 'NÃO RESOLVIDO']);
-            $table->text('solution_description');
+            $table->text('solution_description')->nullable();
             $table->enum('solved', ['YES', 'NO']);
             $table->timestamps();
 
