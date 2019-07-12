@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateWarningsTable extends Migration
+class CreateTechnicianTicketTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,15 +13,17 @@ class CreateWarningsTable extends Migration
      */
     public function up()
     {
-        Schema::create('warnings', function (Blueprint $table) {
+        Schema::create('technician_ticket', function (Blueprint $table) {
             $table->increments('id');
+            $table->unsignedBigInteger('ticket_id');
             $table->unsignedBigInteger('technician_id');
-            $table->string('title');
-            $table->text('description');
             $table->timestamps();
 
             $table->foreign('technician_id')
                 ->references('id')->on('technicians');
+
+            $table->foreign('ticket_id')
+                ->references('id')->on('tickets');
         });
     }
 
@@ -32,6 +34,6 @@ class CreateWarningsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('warnings');
+        Schema::dropIfExists('technician_ticket');
     }
 }
