@@ -15,4 +15,8 @@ class Technician extends Model
     public function warnings() {
         return $this->hasMany(Warnings::class);
     }
+
+    public function tickets() {
+        return $this->belongsToMany(Ticket::class);
+    }
 }
