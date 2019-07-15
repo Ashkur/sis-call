@@ -21,3 +21,4 @@ Route::apiResource('users', 'UserController');
 Route::apiResource('tickets', 'TicketController');
 Route::apiResource('departments', 'DepartmentController');
 Route::apiResource('employees', 'EmployeeController');
+Route::apiResource('technicians', 'Techniciancontroller');
