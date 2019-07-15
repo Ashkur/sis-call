@@ -16,20 +16,20 @@
                                 <v-flex>
                                     <span class="text-danger">{{ error? "Todos os campos devem ser preenchidos!": "" }}</span>
                                     <v-text-field
-                                        v-model.trim="employee.name"
+                                        v-model.trim="technician.name"
                                         :error-messages="nameErrors"
                                         label="Nome"
                                     ></v-text-field>
 
                                     <v-text-field
-                                        v-model.trim="employee.login"
+                                        v-model.trim="technician.login"
                                         :error-messages="loginErrors"
                                         label="Login"
                                     ></v-text-field>
 
                                     <v-text-field
                                         v-if="editMode == false"
-                                        v-model.trim="employee.password"
+                                        v-model.trim="technician.password"
                                         :error-messages="passwordErrors"
                                         :append-icon="showPass1 ? 'visibility' : 'visibility_off'"
                                         :type="showPass1 ? 'text' : 'password'"
@@ -40,7 +40,7 @@
                                     ></v-text-field>
 
                                     <v-combobox
-                                        v-model.trim="employee.department"
+                                        v-model.trim="technician.department"
                                         :error-messages="departmentErrors"
                                         :items="departments"
                                         item-text="name"
@@ -71,7 +71,7 @@
         <h2>Técnicos</h2>
         <v-data-table
             :headers="headers"
-            :items="employees"
+            :items="technicians"
             :no-data-text="noDataText"
             :loading="isLoadingDatatable"
             class="elevation-1 text-xs-center"
@@ -154,8 +154,8 @@ export default {
                 color: ''
             },
             error: '',
-            employee: {},
-            employees: [],
+            technician: {},
+            technicians: [],
             departments: [],
             departmentSelected: [],
             editMode: false,
@@ -168,7 +168,7 @@ export default {
     },
 
     validations: {
-        employee: {
+        technician: {
             name: {
                 required,
                 maxLength: maxLength(255)
@@ -194,46 +194,46 @@ export default {
             this.departments = departments.data
         },
 
-        async fetchEmployees() {
+        async fetchTechnicians() {
             this.isLoadingDatatable = true
-            const res = await fetch('api/employees')
-            const employees = await res.json()
-            this.employees = employees.data
+            const res = await fetch('api/technicians')
+            const technicians = await res.json()
+            this.technicians = technicians.data
             this.isLoadingDatatable = false
         },
 
         openRegisterDialog() {
-            this.employee = {}
+            this.technician = {}
         },
 
         async registerEmployee() {
 
             this.$v.$touch()
 
-            if(!this.$v.employee.$invalid) {
+            if(!this.$v.technician.$invalid) {
 
-                let employee = {
-                    name: this.employee.name,
-                    login: this.employee.login,
-                    password: this.employee.password,
-                    department: this.employee.department.id,
+                let technician = {
+                    name: this.technician.name,
+                    login: this.technician.login,
+                    password: this.technician.password,
+                    department: this.technician.department.id,
                 }
 
-                const res = await fetch('api/employees', {
+                const res = await fetch('api/technicians', {
                     method: 'post',
                     headers: {
                         'Accept': 'application/json, text/plain, */*',
                         'Content-Type': 'application/json'
                     },
-                    body: JSON.stringify(employee)
+                    body: JSON.stringify(technician)
                 })
 
                 this.employeeDialog = !this.employeeDialog
 
                 switch (res.status) {
                     case 201:
-                        let text = 'SETOR ADICIONADO!'
-                        await this.fetchEmployees()
+                        let text = 'TÉCNICO ADICIONADO!'
+                        await this.fetchTechnicians()
                         this.showsSnackbarSuccess(text) 
                         break;
                 
@@ -245,9 +245,9 @@ export default {
             }    
         },
 
-        async openUpdateDialog(employee) {
+        async openUpdateDialog(technician) {
             this.editMode = true
-            this.employee = employee
+            this.technician = technician
             this.employeeDialog = !this.employeeDialog
         },
 
@@ -255,33 +255,33 @@ export default {
 
             this.$v.$touch()
 
-            if(!this.$v.employee.name.$invalid || !this.$v.employee.login.$invalid || !this.$v.employee.department.$invalid) {
+            if(!this.$v.technician.name.$invalid || !this.$v.technician.login.$invalid || !this.$v.technician.department.$invalid) {
                 this.employeeDialog = !this.employeeDialog
 
-                let employee = {
-                    name: this.employee.name,
-                    login: this.employee.login,
-                    department: this.employee.department.id,
+                let technician = {
+                    name: this.technician.name,
+                    login: this.technician.login,
+                    department: this.technician.department.id,
                 }
             
-                const res = await fetch(`api/employees/${this.employee.id}`, {
+                const res = await fetch(`api/technicians/${this.technician.id}`, {
                     method: 'put',
                     headers: {
                         'Accept': 'application/json, text/plain, */*',
                         'Content-Type': 'application/json'
                     },
-                    body: JSON.stringify(employee)
+                    body: JSON.stringify(technician)
                 })
 
                 switch (res.status) {
                     case 200:
-                        this.employee = await res.json()
-                        let textSuccess = 'SERVIDOR EDITADO!'
-                        await this.fetchEmployees()
+                        this.technician = await res.json()
+                        let textSuccess = 'TÉCNICO EDITADO!'
+                        await this.fetchTechnicians()
                         this.showsSnackbarSuccess(textSuccess) 
                         break;
                     case 404:
-                        let textError = 'SERVIDOR NÃO ENCONTRADO!'
+                        let textError = 'TÉCNICO NÃO ENCONTRADO!'
                         this.showsSnackbarError(textError)
                         break;
                     default:
@@ -301,18 +301,18 @@ export default {
 
         async deleteEmployee(id) {
             this.isLoadingDatatable = true
-            const res = await fetch(`api/employees/${id}`, {
+            const res = await fetch(`api/technicians/${id}`, {
                 method: 'delete',
             })
             
             switch (res.status) {
                 case 200:
-                    let textSuccess = 'SERVIDOR EXCLUÍDO!'
-                    await this.fetchEmployees()
+                    let textSuccess = 'TÉCNICO EXCLUÍDO!'
+                    await this.fetchTechnicians()
                     this.showsSnackbarSuccess(textSuccess) 
                     break;
                 case 404:
-                    let textError = 'SERVIDOR NÃO ENCONTRADO!'
+                    let textError = 'TÉCNICO NÃO ENCONTRADO!'
                     this.showsSnackbarError(textError)
                     break;
                 default:
@@ -348,36 +348,36 @@ export default {
     computed: {
         nameErrors () {
             const errors = []
-            if (!this.$v.employee.name.$dirty) return errors
-            !this.$v.employee.name.maxLength && errors.push('Limite máximo do tamanho do nome é de 255 caracteres')
-            !this.$v.employee.name.required && errors.push('Informe um nome.')
+            if (!this.$v.technician.name.$dirty) return errors
+            !this.$v.technician.name.maxLength && errors.push('Limite máximo do tamanho do nome é de 255 caracteres')
+            !this.$v.technician.name.required && errors.push('Informe um nome.')
             return errors
         },
         loginErrors () {
             const errors = []
-            if (!this.$v.employee.login.$dirty) return errors
-            !this.$v.employee.login.maxLength && errors.push('Limite máximo do tamanho do nome é de 255 caracteres')
-            !this.$v.employee.login.required && errors.push('Informe um login.')
+            if (!this.$v.technician.login.$dirty) return errors
+            !this.$v.technician.login.maxLength && errors.push('Limite máximo do tamanho do nome é de 255 caracteres')
+            !this.$v.technician.login.required && errors.push('Informe um login.')
             return errors
         },
         passwordErrors () {
             const errors = []
-            if (!this.$v.employee.password.$dirty) return errors
-            !this.$v.employee.password.maxLength && errors.push('Limite máximo do tamanho do nome é de 255 caracteres')
-            !this.$v.employee.password.required && errors.push('Informe uma senha.')
+            if (!this.$v.technician.password.$dirty) return errors
+            !this.$v.technician.password.maxLength && errors.push('Limite máximo do tamanho do nome é de 255 caracteres')
+            !this.$v.technician.password.required && errors.push('Informe uma senha.')
             return errors
         },
         departmentErrors () {
             const errors = []
-            if (!this.$v.employee.department.$dirty) return errors
-            !this.$v.employee.department.required && errors.push('Informe um setor.')
+            if (!this.$v.technician.department.$dirty) return errors
+            !this.$v.technician.department.required && errors.push('Informe um setor.')
             return errors
         }
     },
 
     async mounted() {
         await this.fetchDepartments()
-        await this.fetchEmployees()
+        await this.fetchTechnicians()
     }
 }
 </script>

@@ -232,7 +232,7 @@ export default {
 
                 switch (res.status) {
                     case 201:
-                        let text = 'SETOR ADICIONADO!'
+                        let text = 'SERVIDOR ADICIONADO!'
                         await this.fetchEmployees()
                         this.showsSnackbarSuccess(text) 
                         break;
