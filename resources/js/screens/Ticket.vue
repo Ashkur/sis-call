@@ -89,12 +89,12 @@
                     </div>
 
                     <div class="m-20">
-                        <div class="headline">{{user.name}}</div>
+                        <div class="headline">{{employee.name}}</div>
                         <div class="subheading">Servidor(a)</div>
                     </div>
                     
                     <div class="m-20">
-                        <div class="headline">T.I.</div>
+                        <div class="headline">{{ticket.department.name}}</div>
                         <div class="subheading">Setor</div>
                     </div>
 
@@ -156,7 +156,7 @@ export default {
             isLoading: true,
             error: false,
             ticket: [],
-            user: [],
+            employee: [],
             solution: {
                 state: 'RESOLVIDO',
                 description: '',
@@ -186,7 +186,7 @@ export default {
             const res = await fetch(`/api/tickets/${id}`)
             const ticket = await res.json()
             this.ticket = ticket.data
-            this.user = this.ticket.user
+            this.employee = this.ticket.employee
             console.log(this.ticket)
         },
 
@@ -217,9 +217,9 @@ export default {
                         'é referente a ocorrência',
                         this.ticket.ocurrence?{text: ` ${this.ticket.ocurrence} `, bold: true}: null,
                         'requisitado pelo servidor',
-                        {text: ` ${this.user.name} `, bold: true},
+                        {text: ` ${this.employee.name} `, bold: true},
                         'do setor',
-                        {text: ' ADMINISTRATIVO, ', bold: true},
+                        {text: ` ${this.ticket.department.name} `, bold: true},
                         'aberto na data',
                         {text: ` ${this.ticket.created_at} `, bold: true},
                         '.'

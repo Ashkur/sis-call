@@ -61,8 +61,8 @@
                         <ticketstatus :status=props.item.status />
                     </td>
                     <td class="text-xs-left">{{ props.item.created_at }}</td>
-                    <td class="text-xs-left">{{ props.item.user.name }}</td>
-                    <td class="text-xs-left">IT</td>
+                    <td class="text-xs-left">{{ props.item.employee.name }}</td>
+                    <td class="text-xs-left">{{ props.item.employee.department.name }}</td>
                     <td class="text-xs-left">
                         <router-link 
                             :to="{
@@ -203,7 +203,7 @@ export default {
         },
 
         listenChannel() {
-            console.log('listenChannel')
+            console.log('listenChannelIsActive')
             window.Echo.channel('ticket-open')
                 .listen('.newTickets', () => {
                     this.fetchTickets()

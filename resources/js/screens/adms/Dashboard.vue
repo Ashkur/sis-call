@@ -1,5 +1,49 @@
 <template>
     <v-container>
+
+        <v-layout row justify-center>
+            <v-dialog v-model="dialog" persistent max-width="600px">
+                <v-btn slot="activator" color="#206eea" dark large>NOVO CHAMADO</v-btn>
+
+                <v-card>
+                    <v-card-title>
+                        <span class="headline">NOVO CHAMADO</span>                        
+                    </v-card-title>
+
+                    <v-card-text>                        
+                        <v-container grid-list-md>
+                            <v-layout wrap>
+                                <v-flex>
+                                    <span class="text-danger">{{ error? "Ao menos um dos campos deve ser preenchido.": "" }}</span>
+                                    <v-combobox
+                                        v-model="ticket.ocurrence"
+                                        :items="commomProblems"
+                                        label="Ocorrência"
+                                        color="#206eea"
+                                        ></v-combobox>
+
+                                    <v-textarea
+                                        v-model="ticket.description"
+                                        color="#206eea"
+                                        label="Descrição da ocorrência"
+                                        value=""
+                                        hint="Descreva um problema não listado ou complemente as informações de uma ocorrência."
+                                        rows="2"
+                                        ></v-textarea>
+                                </v-flex>
+                            </v-layout>
+                        </v-container>
+                    </v-card-text>
+
+                    <v-card-actions>
+                        <v-spacer></v-spacer>
+                        <v-btn color="blue darken-1" flat @click="dialog = false">Cancelar</v-btn>
+                        <v-btn color="blue darken-1" flat @click="registerTicket">Ok!</v-btn>
+                    </v-card-actions>
+                </v-card>
+            </v-dialog>
+        </v-layout>
+
         <h2>Todos os Chamados</h2>        
         <v-data-table
             :loading="this.isTableLoading"
@@ -87,9 +131,30 @@ export default {
                 { title: 'Atender', link: '/' },
                 { title: 'Detalhes'},
             ],
+            commomProblems: [
+                'Atualizar tabelas SEFIP',
+                'Compartilhar pasta',
+                'Erro ao imprimir',
+                'Impressora offline',
+                'Impressora não instalada',
+                'Instalar aplicativo',
+                'Atualizar aplicativo',
+                'Não é possível acessar pasta compartilhada',
+                'Não é possível acessar determinado site',
+                'Problemas ao fazer login no OMNE',
+                'Sem acesso a internet',
+                'Sem acesso a rede',
+                'Hardware (Ex.: Mouse, Teclado, etc.) com defeito'
+            ],
             noDataText: 'Nenhum chamado registrado até o momento.',
             tickets: [],
-            isTableLoading: false
+            ticket: {
+                ocurrence:'',
+                description: ''
+            },            
+            isTableLoading: false,
+            dialog: false,
+            error: false,
         }
     },
 
@@ -101,6 +166,36 @@ export default {
             this.tickets = tickets.data
             console.log(this.tickets)
             this.isTableLoading = false
+        },
+
+        async registerTicket() {
+            console.log('registerTicket')
+            this.isTableLoading = true
+            let ticket = {
+                ocurrence: this.ticket.ocurrence,
+                description: this.ticket.description
+            }
+
+            if(!ticket.ocurrence && !ticket.description) {
+                this.error = true;
+                
+            } else {
+                const res = await fetch('api/tickets', {
+                    method: 'post',
+                    headers: {
+                        'Accept': 'application/json, text/plain, */*',
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(ticket)
+                })
+
+                this.dialog = !this.dialog
+
+                if(res.status == 500){alert('Não foi possível completar a ação.')}
+                console.log(res)
+            }
+            this.isTableLoading = false            
+            
         },
 
         stringTruncate (str, length) {

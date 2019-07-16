@@ -15,17 +15,17 @@ class CreateTicketsTable extends Migration
     {
         Schema::create('tickets', function (Blueprint $table) {
             $table->increments('id');
-            $table->unsignedInteger('user_id');
+            $table->unsignedInteger('employee_id');
             $table->text('ocurrence')->nullable();
             $table->text('description')->nullable();
             $table->enum('status', ['PENDENTE', 'EM ANDAMENTO',  'RESOLVIDO', 'NÃO RESOLVIDO']);
             $table->text('solution_description')->nullable();
-            $table->enum('solved', ['YES', 'NO']);
+            $table->enum('solved', ['YES', 'NO'])->nullable();
             $table->timestamps();
 
-            $table->foreign('user_id')
+            $table->foreign('employee_id')
                 ->references('id')
-                ->on('users');
+                ->on('employees');
         });
     }
 

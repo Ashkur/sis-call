@@ -18,4 +18,8 @@ class Ticket extends Model
     public function technician() {
         return $this->belongsToMany(Technician::class);
     }
+
+    public function employee() {
+        return $this->belongsTo(Employee::class);
+    }
 }
