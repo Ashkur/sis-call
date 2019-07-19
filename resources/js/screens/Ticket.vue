@@ -89,12 +89,12 @@
                     </div>
 
                     <div class="m-20">
-                        <div class="headline">{{employee.name}}</div>
+                        <div class="headline">{{ticket.employee.name}}</div>
                         <div class="subheading">Servidor(a)</div>
                     </div>
                     
                     <div class="m-20">
-                        <div class="headline">{{ticket.department.name}}</div>
+                        <div class="headline">{{ticket.employee.department.name}}</div>
                         <div class="subheading">Setor</div>
                     </div>
 
@@ -103,10 +103,18 @@
                         <div class="subheading">Solução</div>
                     </div>
 
-                    <div class="m-20">
-                        <div class="headline">Uriel Carneiro</div>
+                    <div class="m-20" v-if="ticket.technician == ''">
+                        <div class="headline">Esta ocorrência ainda não foi atendida.</div>
                         <div class="subheading">Técnico Responsável</div>
                     </div>
+
+                    <div class="m-20" v-else>
+                        <div v-for="technician in ticket.technician" :key="technician.id">
+                            <div class="headline">{{technician.name}}.</div>                            
+                        </div>
+                        <div class="subheading">Técnico(s) Responsável</div>                        
+                    </div>
+
                 </div>
             </v-flex>
 
@@ -155,8 +163,11 @@ export default {
             dialog: false,
             isLoading: true,
             error: false,
-            ticket: [],
-            employee: [],
+            ticket: {},
+            employee: {},
+            technician: {
+                id: 1
+            },
             solution: {
                 state: 'RESOLVIDO',
                 description: '',
@@ -314,9 +325,13 @@ export default {
             return text
         },
 
-        answerCall() {
+        async answerCall() {
             console.log("responder chamado")
-            // registraTecnico()
+            let data = {
+                ticket: this.ticket.id,
+                technician: this.technician.id
+            }
+            await this.registerTechnician(data)
             // notificaUsuario()
             this.ticket.status = "EM ANDAMENTO"
         },
@@ -335,6 +350,18 @@ export default {
 
             pdfMake.createPdf(dd).open();
 
+        },
+
+        async registerTechnician(data) {        
+            const res = await fetch('/api/technicians/answercall',
+                {
+                    method: 'post',
+                    headers: {
+                        'Accept': 'application/json, text/plain, */*',
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(data)
+                })
         },
 
         consolelog(title){

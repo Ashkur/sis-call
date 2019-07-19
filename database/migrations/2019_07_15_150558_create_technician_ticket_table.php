@@ -14,9 +14,10 @@ class CreateTechnicianTicketTable extends Migration
     public function up()
     {
         Schema::create('technician_ticket', function (Blueprint $table) {
-            $table->increments('id');
             $table->unsignedBigInteger('ticket_id');
             $table->unsignedBigInteger('technician_id');
+            $table->primary(['ticket_id', 'technician_id']);
+
             $table->timestamps();
 
             $table->foreign('technician_id')

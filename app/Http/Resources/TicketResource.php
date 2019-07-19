@@ -25,7 +25,8 @@ class TicketResource extends JsonResource
             'status' => $this->status,
             'created_at' => $carbon->format('jS \o\f F, Y G:i'),
             'employee' => $this->employee,
-            'department' => $this->employee->department
+            'department' => $this->employee->department,
+            'technician' => $this->technicians
         ];
     }
 }
