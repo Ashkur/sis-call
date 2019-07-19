@@ -197,9 +197,12 @@ export default {
             console.log('soundNotification')
         },
 
-        displayNotification() {
-            console.log('displayNotification')
+        displayTicketOpenNotification() {
             this.$snotify.success('Chamado registrado!')
+        },
+
+        displayTicketAnsweredNotification() {
+            this.$snotify.info('Seu chamado está em andamento!')
         },
 
         listenChannel() {
@@ -207,9 +210,17 @@ export default {
             window.Echo.channel('ticket-open')
                 .listen('.newTickets', () => {
                     this.fetchTickets()
-                    this.displayNotification()
+                    this.displayTicketOpenNotification()
                     this.soundNotification()
                 })
+
+            window.Echo.channel('ticket-answered')
+                .listen('.ticketAnswered', () => {
+                    this.fetchTickets()
+                    this.displayTicketAnsweredNotification()
+                    this.soundNotification()
+                })
+                
         }
 
     },
@@ -222,6 +233,9 @@ export default {
     destroyed: function () {
             window.Echo.channel('ticket-open')
                 .stopListening('.newTickets')
+            
+            window.Echo.channel('ticket-answered')
+                .stopListening('.ticketAnswered')
         },
   }
 </script>

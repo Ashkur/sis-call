@@ -21,4 +21,5 @@ Route::apiResource('users', 'UserController');
 Route::apiResource('tickets', 'TicketController');
 Route::apiResource('departments', 'DepartmentController');
 Route::apiResource('employees', 'EmployeeController');
-Route::apiResource('technicians', 'Techniciancontroller');
+Route::apiResource('technicians', 'TechnicianController');
+Route::post('technicians/answercall', 'TechnicianController@answerCall');

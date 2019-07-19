@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Department;
 use App\Technician;
+use App\Ticket;
+use App\Events\TicketAnswered;
 use App\Http\Resources\TechnicianResource;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
@@ -74,5 +76,26 @@ class TechnicianController extends Controller
         } catch(\Exception $e) {
             return response()->json($e->getCode(), 400);
         }
+    }
+
+    public function answerCall(Request $request) {
+        
+        try {
+            $technician = Technician::find($request->technician);
+            $ticket = Ticket::find($request->ticket);
+            $ticket->status = 'EM ANDAMENTO';
+
+            $technician->tickets()->save($ticket);
+
+            $this->notifyAnswerCall();
+            
+            return response()->json('registered', 200);
+        } catch(\Exception $e) {
+            return response()->json($e->getCode(), 400);
+        }
+    }
+
+    public function notifyAnswerCall() {
+        event(new TicketAnswered());
     }
 }
